@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>本地存储</title>
+  </head>
+  <body>
+    <h1>本地存储的演示</h1>
+    <button id="btn01">存</button>
+    <button id="btn02">取</button>
+    <hr />
+
+    <script>
+      btn01.onclick = () => {
+        // console.log(sessionStorage)
+
+        //setItem()用来存储数据
+        sessionStorage.setItem("name", "孙悟空")
+      }
+      btn02.onclick = () => {}
+    </script>
+  </body>
+</html>
