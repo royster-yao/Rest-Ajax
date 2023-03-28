@@ -1,4 +1,7 @@
 const express = require("express")
+// 引入jwt
+const jwt = require("jsonwebtoken")
+
 const app = express()
 
  let STU_ARR = [
@@ -14,7 +17,7 @@ app.use((req, res,next) => {
        // 设置响应头
     res.setHeader("Access-Control-Allow-Origin","*")
     res.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE,PATCH")
-    res.setHeader("Access-Control-Allow-Headers","Content-type")
+    res.setHeader("Access-Control-Allow-Headers","Content-type,Authorization")
     // Access-Control-Allow-Origin 设置指定值时只能设置一个
     // res.setHeader("Access-Control-Allow-Origin","http://127.0.0.1:5500")
     // Access-Control-Allow-Methods 允许的请求方式
@@ -28,9 +31,22 @@ app.post("/login",(req, res) => {
     const {username,password} = req.body
     // 验证用户名和密码
     if(username === "admin" && password === "123123"){
+        // 登陆成功，生成token
+        const token = jwt.sign({
+            id:"1234",username:
+            "admin",
+            nickname:"超级管理员"},
+            "chaojianquanmima",
+            {
+                expiresIn:"7d"
+            }
+            )
         res.send({
             status:"OK",
-            data:{id:"1234",username:"admin",nickname:"超级管理员"}
+            data:{
+                token,
+                nickname:"超级管理员"
+            }
         })
     }else {
         res.status(403).send({
@@ -43,17 +59,36 @@ app.post("/login",(req, res) => {
 // 统一的api
 // 定义学生相关的路由
 app.get("/students",(req,res) => {
-    console.log("收到了students的get请求");
-    // 返回学生信息
-    res.send({
-        status:"OK",
-        data:STU_ARR
-    })
+ 
+
+    // 对token进行解码
+    try {
+        // 这个路由必须是登录才能访问
+        // 需要检查用户是否登录
+        // 读取请求头
+        const token = req.get("Authorization").split(" ")[1]
+        const decodeToken = jwt.verify(token,"chaojianquanmima")
+
+        console.log(decodeToken);
+        // 解码成功token有效
+        // 返回学生信息
+        res.send({
+            status:"OK",
+            data:STU_ARR
+        })
+    } catch (error) {
+        // 解码错误，用户的tiken无效
+        res.status(403).send({
+            status:"error",
+            data:"token无效"
+        })
+    }
+    
+   
 })
 
 // 定义一个添加学生的路由 
 app.post("/students",(req, res) => {
-    console.log("收到了students的post请求",req.body);
     // 获取学生信息
     const {name,age,gender,address} = req.body    // 将学生信息添加到数组
     // 创建学生信息
