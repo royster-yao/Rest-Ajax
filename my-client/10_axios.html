@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <button id="btn1">按钮1</button>
+    <button id="btn2">按钮2</button>
+    <script>
+      document.getElementById("btn1").onclick = () => {
+        // 直接调用axios发送请求
+        // axios(config)
+        axios({
+          method: "POST",
+          url: "http://localhost:3000/students",
+          data: {
+            //请求参数
+            name: "唐僧",
+            age: 18,
+            gender: "男",
+            address: "女儿国",
+          }, // 请求参数
+
+          // data:"name=swk&&age=18"
+        })
+          .then((result) => {
+            // result是axios封装过的
+            console.log(result.data)
+          })
+          .catch((err) => {
+            console.log("出错了！", err)
+          })
+      }
+      document.getElementById("btn2").onclick = () => {
+        // 直接调用axios发送请求
+        // axios(config)
+        axios({
+          method: "GET",
+          url: "http://localhost:3000/students",
+        })
+          .then((result) => {
+            // axios默认只会在响应状态码为2xx时才会调用then
+            // result是axios封装过的
+            console.log(result.data)
+          })
+          .catch((err) => {
+            console.log("出错了！", err)
+          })
+      }
+    </script>
+  </body>
+</html>

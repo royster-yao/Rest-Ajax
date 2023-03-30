@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 50%;
+      }
+      td,
+      th {
+        font-size: 20px;
+        text-align: center;
+        border: 1px solid #000;
+      }
+      caption {
+        font-size: 30px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="btn01">点我一下</button>
+    <button id="btn02">取消</button>
+    <button id="btn03">btn03</button>
+    <script>
+      const btn01 = document.getElementById("btn01")
+      const btn02 = document.getElementById("btn02")
+      const btn03 = document.getElementById("btn03")
+      let controller
+      btn01.onclick = () => {
+        // 创建一个AbortController
+        controller = new AbortController()
+        // setTimeout(() => {
+        //   controller.abort()
+        // }, 3000)
+
+        // 终止请求
+        // 点击按钮向test发送请
+        fetch("http://localhost:3000/test", {
+          signal: controller.signal,
+        })
+          .then((res) => console.log(res))
+          .catch((err) => console.log("出错了", err))
+      }
+
+      btn02.onclick = () => {
+        controller && controller.abort()
+      }
+      btn03.onclick = async () => {
+        // fetch("http://localhost:3000/test").then()
+        // 将promise改写为await时，一定要写try-catch
+        try {
+          const res = await fetch("http://localhost:3000/students")
+          const data = await res.json()
+          console.log(data)
+        } catch (error) {
+          console.log("出错了！", error)
+        }
+      }
+    </script>
+  </body>
+</html>

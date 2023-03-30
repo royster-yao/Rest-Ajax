@@ -24,7 +24,9 @@ app.use((req, res,next) => {
     // Access-Control-Allow-Headers 允许传递的请求头
     next()
 })
-
+app.get("/test",(req, res) =>{
+    
+})
 // 定义一个登录的路由
 app.post("/login",(req, res) => {
     // 获取用户输入的用户名和密码
@@ -69,7 +71,7 @@ app.get("/students",(req,res) => {
         const token = req.get("Authorization").split(" ")[1]
         const decodeToken = jwt.verify(token,"chaojianquanmima")
 
-        console.log(decodeToken);
+        // console.log(decodeToken);
         // 解码成功token有效
         // 返回学生信息
         res.send({
